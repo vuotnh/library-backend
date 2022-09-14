@@ -14,7 +14,7 @@ export class ImageIntercepter implements NestInterceptor {
     }
     intercept(context: ExecutionContext, next: CallHandler): Observable<any> | Promise<Observable<any>> {
         const folderName = context.switchToHttp().getRequest().query.folder;
-        const destination = `./${folderName}`;
+        const destination = `./uploads/${folderName}`;
         const multerOptions: MulterOptions = {
             storage: diskStorage({
                 destination
