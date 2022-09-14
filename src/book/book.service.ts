@@ -9,8 +9,14 @@ export class BookService{
     constructor(@InjectModel(Book.name) private bookModel: Model<BookDocument>) {}
 
     async createNewBook(book: Book): Promise<Book> {
-        const newBook = new this.bookModel(book);
-        return newBook.save();
+        try{
+            const newBook = new this.bookModel(book);
+            return newBook.save();
+        } catch(error) {
+            console.log(error)
+            throw new Error(`Error in create new Book:${error}`);
+        }
+        
     }
 
     async getAllBooks(): Promise<Book[]> {

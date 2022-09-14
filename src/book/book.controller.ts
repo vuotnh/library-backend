@@ -1,6 +1,7 @@
-import {Body, Controller, Delete, Get, HttpStatus, Param, Post, Put, Res} from "@nestjs/common";
+import {Body, Controller, Delete, Get, HttpStatus, InternalServerErrorException, Param, Post, Put, Req, Res} from "@nestjs/common";
 import { Book } from "./schemas/book.schema";
 import { BookService } from "./book.service";
+import { CreateBookDTO } from "./dto/create-book.dto";
 
 @Controller('books')
 export class BookController {
@@ -23,11 +24,18 @@ export class BookController {
     }
 
     @Post()
-    async createNewBook(@Res() response, book: Book) {
-        const newBook = await this.bookService.createNewBook(book);
-        return response.status(HttpStatus.CREATED).json({
-            newBook
-        })
+    async createNewBook(@Res() response, @Req() req, @Body() createBookDto: CreateBookDTO) {
+        try{
+            createBookDto.createdAt = new Date(Date.now());
+            const newBook = await this.bookService.createNewBook(createBookDto);
+            console.log(newBook)
+            return response.status(HttpStatus.CREATED).json({
+                newBook
+            })
+        } catch(error){
+            throw new InternalServerErrorException(error);
+        };
+        
     }
 
     @Delete('/:id')
