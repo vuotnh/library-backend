@@ -14,9 +14,9 @@ export class ImageController{
 
 
     @Post('/uploads')
-    @UseInterceptors(FilesInterceptor('files'))
+    @UseInterceptors(new ImageIntercepter('files'))
     uploadMultipleFile(@UploadedFiles() files: Array<Express.Multer.File>){
-        console.log(files);
+        return "upload ok"
     }
 
     @Get('/:imagePath')
